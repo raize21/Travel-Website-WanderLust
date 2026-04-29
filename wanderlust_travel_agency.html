@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wanderlust — Explore the World</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;900&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --ocean:#0A2540;--sunset:#FF7A00;--sand:#F5E6CA;--white:#fff;
+    --glass:rgba(255,255,255,0.12);--glass-border:rgba(255,255,255,0.25);
+  }
+  html{scroll-behavior:smooth}
+  body{font-family:'Lato',sans-serif;background:#fff;color:#0A2540;overflow-x:hidden}
+  
+  /* NAV */
+  nav{position:fixed;top:0;left:0;right:0;z-index:999;padding:1.2rem 4rem;display:flex;align-items:center;justify-content:space-between;background:rgba(10,37,64,0.0);backdrop-filter:blur(0px);transition:all 0.4s ease}
+  nav.scrolled{background:rgba(10,37,64,0.95);backdrop-filter:blur(20px);padding:0.8rem 4rem}
+  .nav-logo{font-family:'Montserrat',sans-serif;font-weight:900;font-size:1.6rem;color:#fff;letter-spacing:-0.5px}
+  .nav-logo span{color:#FF7A00}
+  .nav-links{display:flex;gap:2rem;list-style:none}
+  .nav-links a{color:rgba(255,255,255,0.85);text-decoration:none;font-size:0.9rem;font-weight:600;letter-spacing:0.5px;text-transform:uppercase;transition:color 0.3s}
+  .nav-links a:hover{color:#FF7A00}
+  .nav-btn{background:#FF7A00;color:#fff;border:none;padding:0.6rem 1.5rem;border-radius:25px;font-weight:700;font-size:0.85rem;cursor:pointer;transition:all 0.3s;text-transform:uppercase;letter-spacing:0.5px}
+  .nav-btn:hover{background:#e66a00;transform:translateY(-2px);box-shadow:0 8px 25px rgba(255,122,0,0.4)}
+
+  /* HERO */
+  #hero{position:relative;height:100vh;min-height:700px;overflow:hidden;display:flex;align-items:center;justify-content:center}
+  .hero-bg{position:absolute;inset:0;background:linear-gradient(135deg,#0A2540 0%,#1a4a7a 50%,#0f3d6b 100%)}
+  .hero-img{position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1600&q=80') center/cover;opacity:0.45;animation:heroZoom 20s ease-in-out infinite alternate}
+  @keyframes heroZoom{from{transform:scale(1)}to{transform:scale(1.08)}}
+  .hero-overlay{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(10,37,64,0.3) 0%,rgba(10,37,64,0.7) 100%)}
+  .hero-content{position:relative;z-index:2;text-align:center;padding:2rem;max-width:900px;animation:fadeUp 1.2s ease forwards}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(40px)}to{opacity:1;transform:translateY(0)}}
+  .hero-badge{display:inline-block;background:rgba(255,122,0,0.2);border:1px solid rgba(255,122,0,0.5);color:#FF7A00;padding:0.4rem 1.2rem;border-radius:25px;font-size:0.8rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:1.5rem}
+  .hero-title{font-family:'Montserrat',sans-serif;font-size:clamp(2.8rem,7vw,5.5rem);font-weight:900;color:#fff;line-height:1.05;margin-bottom:1.2rem;letter-spacing:-1px}
+  .hero-title span{color:#FF7A00}
+  .hero-sub{font-size:1.2rem;color:rgba(255,255,255,0.75);font-weight:300;margin-bottom:2.5rem;line-height:1.6}
+  
+  /* SEARCH BAR */
+  .search-bar{background:rgba(255,255,255,0.12);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,0.2);border-radius:80px;padding:0.5rem 0.5rem 0.5rem 2rem;display:flex;align-items:center;gap:1rem;margin-bottom:2rem;flex-wrap:wrap}
+  .search-field{display:flex;flex-direction:column;flex:1;min-width:120px}
+  .search-field label{font-size:0.7rem;font-weight:700;color:rgba(255,255,255,0.6);text-transform:uppercase;letter-spacing:1px;margin-bottom:2px}
+  .search-field input{background:transparent;border:none;color:#fff;font-size:0.95rem;font-family:'Lato',sans-serif;outline:none;width:100%}
+  .search-field input::placeholder{color:rgba(255,255,255,0.5)}
+  .search-divider{width:1px;height:40px;background:rgba(255,255,255,0.2)}
+  .search-btn{background:#FF7A00;color:#fff;border:none;width:52px;height:52px;border-radius:50%;cursor:pointer;font-size:1.3rem;transition:all 0.3s;flex-shrink:0}
+  .search-btn:hover{background:#e66a00;transform:scale(1.08)}
+  
+  .hero-ctas{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap}
+  .btn-primary{background:#FF7A00;color:#fff;border:none;padding:0.9rem 2.2rem;border-radius:50px;font-weight:700;font-size:0.95rem;cursor:pointer;transition:all 0.3s;text-transform:uppercase;letter-spacing:0.5px}
+  .btn-primary:hover{background:#e66a00;transform:translateY(-3px);box-shadow:0 12px 30px rgba(255,122,0,0.45)}
+  .btn-outline{background:transparent;color:#fff;border:2px solid rgba(255,255,255,0.5);padding:0.9rem 2.2rem;border-radius:50px;font-weight:700;font-size:0.95rem;cursor:pointer;transition:all 0.3s;text-transform:uppercase;letter-spacing:0.5px}
+  .btn-outline:hover{border-color:#FF7A00;color:#FF7A00;transform:translateY(-3px)}
+  
+  .hero-stats{display:flex;gap:3rem;justify-content:center;margin-top:3rem;padding-top:2rem;border-top:1px solid rgba(255,255,255,0.15)}
+  .stat{text-align:center;color:#fff}
+  .stat-num{font-family:'Montserrat',sans-serif;font-size:1.8rem;font-weight:900;color:#FF7A00}
+  .stat-label{font-size:0.8rem;color:rgba(255,255,255,0.6);text-transform:uppercase;letter-spacing:1px;margin-top:2px}
+  
+  /* SECTIONS */
+  section{padding:5rem 4rem}
+  .section-label{font-size:0.8rem;font-weight:700;color:#FF7A00;text-transform:uppercase;letter-spacing:3px;margin-bottom:0.8rem}
+  .section-title{font-family:'Montserrat',sans-serif;font-size:clamp(1.8rem,4vw,3rem);font-weight:800;color:#0A2540;line-height:1.2;margin-bottom:1rem}
+  .section-sub{font-size:1.05rem;color:#666;line-height:1.7;max-width:550px}
+  .section-header{margin-bottom:3rem}
+  .section-header.center{text-align:center;display:flex;flex-direction:column;align-items:center}
+  .section-header.center .section-sub{text-align:center}
+  
+  /* DESTINATIONS */
+  #destinations{background:#f8f9fc}
+  .dest-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:1.5rem}
+  .dest-card{position:relative;border-radius:20px;overflow:hidden;height:360px;cursor:pointer;transition:transform 0.4s ease,box-shadow 0.4s ease}
+  .dest-card:hover{transform:translateY(-8px);box-shadow:0 30px 60px rgba(10,37,64,0.25)}
+  .dest-card:hover .dest-img{transform:scale(1.08)}
+  .dest-img{width:100%;height:100%;object-fit:cover;transition:transform 0.6s ease}
+  .dest-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(10,37,64,0.85) 0%,transparent 60%)}
+  .dest-info{position:absolute;bottom:0;left:0;right:0;padding:1.5rem}
+  .dest-tag{background:rgba(255,122,0,0.9);color:#fff;padding:0.25rem 0.8rem;border-radius:20px;font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;display:inline-block;margin-bottom:0.6rem}
+  .dest-name{font-family:'Montserrat',sans-serif;font-size:1.5rem;font-weight:800;color:#fff;margin-bottom:0.3rem}
+  .dest-desc{font-size:0.85rem;color:rgba(255,255,255,0.75);line-height:1.5}
+  .dest-price{position:absolute;top:1rem;right:1rem;background:rgba(255,255,255,0.15);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,0.2);color:#fff;padding:0.4rem 0.8rem;border-radius:20px;font-size:0.85rem;font-weight:700}
+  
+  /* PACKAGES */
+  #packages{background:#fff}
+  .pkg-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:2rem}
+  .pkg-card{background:#fff;border-radius:20px;overflow:hidden;box-shadow:0 4px 24px rgba(10,37,64,0.08);border:1px solid rgba(10,37,64,0.06);transition:all 0.4s}
+  .pkg-card:hover{transform:translateY(-6px);box-shadow:0 20px 50px rgba(10,37,64,0.15)}
+  .pkg-img{height:220px;object-fit:cover;width:100%}
+  .pkg-body{padding:1.5rem}
+  .pkg-duration{font-size:0.75rem;font-weight:700;color:#FF7A00;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:0.5rem}
+  .pkg-name{font-family:'Montserrat',sans-serif;font-size:1.25rem;font-weight:800;color:#0A2540;margin-bottom:0.8rem}
+  .pkg-highlights{list-style:none;margin-bottom:1.2rem}
+  .pkg-highlights li{font-size:0.88rem;color:#555;padding:0.3rem 0;border-bottom:1px solid #f0f0f0;display:flex;align-items:center;gap:0.5rem}
+  .pkg-highlights li::before{content:'✓';color:#FF7A00;font-weight:900;font-size:0.75rem}
+  .pkg-footer{display:flex;align-items:center;justify-content:space-between;padding-top:1rem;border-top:1px solid #f0f0f0}
+  .pkg-price{font-family:'Montserrat',sans-serif;font-size:1.5rem;font-weight:900;color:#0A2540}
+  .pkg-price span{font-size:0.8rem;font-weight:400;color:#888}
+  .pkg-btn{background:#0A2540;color:#fff;border:none;padding:0.6rem 1.4rem;border-radius:25px;font-weight:700;font-size:0.82rem;cursor:pointer;transition:all 0.3s;text-transform:uppercase}
+  .pkg-btn:hover{background:#FF7A00;transform:scale(1.05)}
+  
+  /* WHY US */
+  #why{background:linear-gradient(135deg,#0A2540 0%,#1a4a7a 100%);position:relative;overflow:hidden}
+  #why::before{content:'';position:absolute;top:-100px;right:-100px;width:500px;height:500px;background:rgba(255,122,0,0.05);border-radius:50%}
+  .why-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:2rem}
+  .why-card{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:20px;padding:2rem;text-align:center;transition:all 0.4s}
+  .why-card:hover{background:rgba(255,255,255,0.1);transform:translateY(-5px)}
+  .why-icon{width:64px;height:64px;border-radius:50%;background:rgba(255,122,0,0.15);border:2px solid rgba(255,122,0,0.3);display:flex;align-items:center;justify-content:center;margin:0 auto 1.2rem;font-size:1.6rem;transition:all 0.4s}
+  .why-card:hover .why-icon{background:rgba(255,122,0,0.25);border-color:#FF7A00;transform:scale(1.1)}
+  .why-title{font-family:'Montserrat',sans-serif;font-size:1.05rem;font-weight:800;color:#fff;margin-bottom:0.6rem}
+  .why-desc{font-size:0.88rem;color:rgba(255,255,255,0.65);line-height:1.6}
+  .why-section-title{font-family:'Montserrat',sans-serif;font-size:clamp(1.8rem,4vw,3rem);font-weight:800;color:#fff;margin-bottom:0.8rem}
+  .why-section-label{color:#FF7A00;font-size:0.8rem;font-weight:700;text-transform:uppercase;letter-spacing:3px;margin-bottom:0.8rem}
+  .why-section-sub{color:rgba(255,255,255,0.65);font-size:1rem;line-height:1.7;max-width:520px;margin-bottom:3rem}
+  
+  /* TESTIMONIALS */
+  #testimonials{background:#fafafa}
+  .test-track{display:flex;gap:2rem;overflow-x:auto;scrollbar-width:none;padding-bottom:1rem}
+  .test-track::-webkit-scrollbar{display:none}
+  .test-card{min-width:320px;max-width:360px;background:#fff;border-radius:20px;padding:2rem;box-shadow:0 4px 24px rgba(10,37,64,0.08);border:1px solid rgba(10,37,64,0.06);flex-shrink:0}
+  .test-stars{color:#FF7A00;font-size:1rem;margin-bottom:1rem;letter-spacing:2px}
+  .test-text{font-size:0.95rem;color:#444;line-height:1.7;font-style:italic;margin-bottom:1.5rem}
+  .test-author{display:flex;align-items:center;gap:0.8rem}
+  .test-avatar{width:44px;height:44px;border-radius:50%;object-fit:cover}
+  .test-name{font-family:'Montserrat',sans-serif;font-weight:700;font-size:0.9rem;color:#0A2540}
+  .test-trip{font-size:0.78rem;color:#888}
+  .test-controls{display:flex;gap:0.8rem;margin-top:2rem;justify-content:center}
+  .test-dot{width:10px;height:10px;border-radius:50%;background:#ddd;cursor:pointer;transition:all 0.3s}
+  .test-dot.active{background:#FF7A00;width:28px;border-radius:5px}
+  
+  /* CTA */
+  #cta{position:relative;text-align:center;overflow:hidden;padding:6rem 4rem}
+  .cta-bg{position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1530789253388-582c481c54b0?w=1400&q=80') center/cover}
+  .cta-overlay{position:absolute;inset:0;background:linear-gradient(135deg,rgba(10,37,64,0.85),rgba(10,37,64,0.7))}
+  .cta-content{position:relative;z-index:2}
+  .cta-title{font-family:'Montserrat',sans-serif;font-size:clamp(2rem,5vw,3.5rem);font-weight:900;color:#fff;margin-bottom:1rem}
+  .cta-sub{font-size:1.1rem;color:rgba(255,255,255,0.75);margin-bottom:2.5rem}
+  .btn-cta{background:#FF7A00;color:#fff;border:none;padding:1.1rem 3rem;border-radius:50px;font-weight:800;font-size:1rem;cursor:pointer;text-transform:uppercase;letter-spacing:1px;transition:all 0.3s;animation:pulse 2.5s infinite}
+  @keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(255,122,0,0.5)}50%{box-shadow:0 0 0 20px rgba(255,122,0,0)}}
+  .btn-cta:hover{background:#e66a00;transform:translateY(-4px)}
+  
+  /* FOOTER */
+  footer{background:#060f1e;padding:4rem;color:rgba(255,255,255,0.6)}
+  .footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:3rem;margin-bottom:3rem}
+  .footer-brand .nav-logo{display:block;margin-bottom:1rem}
+  .footer-desc{font-size:0.9rem;line-height:1.7;margin-bottom:1.5rem}
+  .social-links{display:flex;gap:0.8rem}
+  .social-link{width:36px;height:36px;border-radius:50%;border:1px solid rgba(255,255,255,0.15);display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,0.6);font-size:0.85rem;cursor:pointer;transition:all 0.3s}
+  .social-link:hover{border-color:#FF7A00;color:#FF7A00}
+  .footer-heading{font-family:'Montserrat',sans-serif;font-weight:700;font-size:0.85rem;color:#fff;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:1.2rem}
+  .footer-links{list-style:none}
+  .footer-links li{margin-bottom:0.6rem}
+  .footer-links a{color:rgba(255,255,255,0.55);text-decoration:none;font-size:0.88rem;transition:color 0.3s}
+  .footer-links a:hover{color:#FF7A00}
+  .newsletter{background:rgba(255,255,255,0.05);border-radius:12px;padding:1.5rem;border:1px solid rgba(255,255,255,0.08)}
+  .newsletter input{width:100%;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.12);border-radius:8px;padding:0.7rem 1rem;color:#fff;font-size:0.88rem;margin:0.8rem 0;outline:none}
+  .newsletter input::placeholder{color:rgba(255,255,255,0.4)}
+  .newsletter-btn{width:100%;background:#FF7A00;color:#fff;border:none;padding:0.7rem;border-radius:8px;font-weight:700;font-size:0.85rem;cursor:pointer;transition:all 0.3s}
+  .newsletter-btn:hover{background:#e66a00}
+  .footer-bottom{border-top:1px solid rgba(255,255,255,0.08);padding-top:2rem;text-align:center;font-size:0.82rem;color:rgba(255,255,255,0.35)}
+  
+  /* SCROLL ANIMATIONS */
+  .fade-in{opacity:0;transform:translateY(30px);transition:opacity 0.7s ease,transform 0.7s ease}
+  .fade-in.visible{opacity:1;transform:translateY(0)}
+  .fade-in-delay-1{transition-delay:0.1s}
+  .fade-in-delay-2{transition-delay:0.2s}
+  .fade-in-delay-3{transition-delay:0.3s}
+  .fade-in-delay-4{transition-delay:0.4s}
+  
+  @media(max-width:768px){
+    section{padding:3rem 1.5rem}
+    nav{padding:1rem 1.5rem}
+    nav.scrolled{padding:0.7rem 1.5rem}
+    .nav-links{display:none}
+    .footer-grid{grid-template-columns:1fr;gap:2rem}
+    .hero-stats{gap:1.5rem}
+    .search-bar{border-radius:16px}
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="navbar">
+  <div class="nav-logo">Wander<span>lust</span></div>
+  <ul class="nav-links">
+    <li><a href="#destinations">Destinations</a></li>
+    <li><a href="#packages">Packages</a></li>
+    <li><a href="#why">About</a></li>
+    <li><a href="#testimonials">Reviews</a></li>
+  </ul>
+  <button class="nav-btn">Book Now</button>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-img"></div>
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <div class="hero-badge">✦ Premium Travel Experiences</div>
+    <h1 class="hero-title">Explore the World<br><span>With Us</span></h1>
+    <p class="hero-sub">Custom tours, unforgettable experiences — crafted just for you</p>
+    <div class="search-bar">
+      <div class="search-field">
+        <label>Destination</label>
+        <input type="text" placeholder="Where to?">
+      </div>
+      <div class="search-divider"></div>
+      <div class="search-field">
+        <label>Travel Dates</label>
+        <input type="text" placeholder="Pick dates">
+      </div>
+      <div class="search-divider"></div>
+      <div class="search-field">
+        <label>Travelers</label>
+        <input type="text" placeholder="2 adults">
+      </div>
+      <button class="search-btn">🔍</button>
+    </div>
+    <div class="hero-ctas">
+      <button class="btn-primary">Start Your Journey</button>
+      <button class="btn-outline">Explore Packages</button>
+    </div>
+    <div class="hero-stats">
+      <div class="stat">
+        <div class="stat-num" id="counter1">0</div>
+        <div class="stat-label">Trips Booked</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num" id="counter2">0</div>
+        <div class="stat-label">Destinations</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num" id="counter3">0</div>
+        <div class="stat-label">Happy Travelers</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DESTINATIONS -->
+<section id="destinations">
+  <div class="section-header fade-in">
+    <div class="section-label">✦ Where to Go</div>
+    <h2 class="section-title">Popular Destinations</h2>
+    <p class="section-sub">From tropical paradises to ancient cities — discover your perfect escape</p>
+  </div>
+  <div class="dest-grid">
+    <div class="dest-card fade-in fade-in-delay-1">
+      <img class="dest-img" src="https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=600&q=80" alt="Bali">
+      <div class="dest-overlay"></div>
+      <div class="dest-price">From $899</div>
+      <div class="dest-info">
+        <div class="dest-tag">🌺 Bali</div>
+        <div class="dest-name">Indonesia</div>
+        <div class="dest-desc">Temples, rice terraces & pristine beaches</div>
+      </div>
+    </div>
+    <div class="dest-card fade-in fade-in-delay-2">
+      <img class="dest-img" src="https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=600&q=80" alt="Paris">
+      <div class="dest-overlay"></div>
+      <div class="dest-price">From $1,299</div>
+      <div class="dest-info">
+        <div class="dest-tag">🗼 Paris</div>
+        <div class="dest-name">France</div>
+        <div class="dest-desc">Romance, art & world-class cuisine await</div>
+      </div>
+    </div>
+    <div class="dest-card fade-in fade-in-delay-3">
+      <img class="dest-img" src="https://images.unsplash.com/photo-1514282401047-d79a71a590e8?w=600&q=80" alt="Maldives">
+      <div class="dest-overlay"></div>
+      <div class="dest-price">From $2,199</div>
+      <div class="dest-info">
+        <div class="dest-tag">🌊 Maldives</div>
+        <div class="dest-name">Maldives</div>
+        <div class="dest-desc">Crystal lagoons & overwater bungalows</div>
+      </div>
+    </div>
+    <div class="dest-card fade-in fade-in-delay-4">
+      <img class="dest-img" src="https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=600&q=80" alt="Tokyo">
+      <div class="dest-overlay"></div>
+      <div class="dest-price">From $1,599</div>
+      <div class="dest-info">
+        <div class="dest-tag">⛩️ Tokyo</div>
+        <div class="dest-name">Japan</div>
+        <div class="dest-desc">Tradition meets futurism in neon-lit streets</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PACKAGES -->
+<section id="packages">
+  <div class="section-header fade-in center">
+    <div class="section-label">✦ Our Packages</div>
+    <h2 class="section-title">Curated Travel Packages</h2>
+    <p class="section-sub">Handcrafted itineraries designed to give you the most extraordinary experience</p>
+  </div>
+  <div class="pkg-grid">
+    <div class="pkg-card fade-in fade-in-delay-1">
+      <img class="pkg-img" src="https://images.unsplash.com/photo-1510414842594-a61c69b5ae57?w=600&q=80" alt="Island Escape">
+      <div class="pkg-body">
+        <div class="pkg-duration">7 Days · 6 Nights</div>
+        <div class="pkg-name">Tropical Island Escape</div>
+        <ul class="pkg-highlights">
+          <li>Snorkeling & water sports</li>
+          <li>Sunset beach dinner</li>
+          <li>5-star overwater villa</li>
+          <li>Island hopping tour</li>
+        </ul>
+        <div class="pkg-footer">
+          <div class="pkg-price">$2,499<span>/person</span></div>
+          <button class="pkg-btn">Book Now</button>
+        </div>
+      </div>
+    </div>
+    <div class="pkg-card fade-in fade-in-delay-2">
+      <img class="pkg-img" src="https://images.unsplash.com/photo-1519677100203-a0e668c92439?w=600&q=80" alt="European Adventure">
+      <div class="pkg-body">
+        <div class="pkg-duration">10 Days · 9 Nights</div>
+        <div class="pkg-name">European Grand Tour</div>
+        <ul class="pkg-highlights">
+          <li>Paris, Rome & Barcelona</li>
+          <li>Guided museum tours</li>
+          <li>Luxury rail travel</li>
+          <li>Local cooking class</li>
+        </ul>
+        <div class="pkg-footer">
+          <div class="pkg-price">$3,899<span>/person</span></div>
+          <button class="pkg-btn">Book Now</button>
+        </div>
+      </div>
+    </div>
+    <div class="pkg-card fade-in fade-in-delay-3">
+      <img class="pkg-img" src="https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=600&q=80" alt="Mountain Trek">
+      <div class="pkg-body">
+        <div class="pkg-duration">5 Days · 4 Nights</div>
+        <div class="pkg-name">Alpine Adventure Trek</div>
+        <ul class="pkg-highlights">
+          <li>Expert mountain guides</li>
+          <li>Scenic cable car rides</li>
+          <li>Cozy mountain lodge</li>
+          <li>Wildlife photography</li>
+        </ul>
+        <div class="pkg-footer">
+          <div class="pkg-price">$1,799<span>/person</span></div>
+          <button class="pkg-btn">Book Now</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHY US -->
+<section id="why">
+  <div class="why-section-label fade-in">✦ Why Wanderlust</div>
+  <div class="why-section-title fade-in">Travel with Confidence &<br>Peace of Mind</div>
+  <p class="why-section-sub fade-in">We've helped 50,000+ travelers create memories that last a lifetime — and we're just getting started.</p>
+  <div class="why-grid">
+    <div class="why-card fade-in fade-in-delay-1">
+      <div class="why-icon">🧭</div>
+      <div class="why-title">Expert Local Guides</div>
+      <p class="why-desc">Our certified guides bring destinations to life with insider knowledge and stories you won't find in guidebooks.</p>
+    </div>
+    <div class="why-card fade-in fade-in-delay-2">
+      <div class="why-icon">💰</div>
+      <div class="why-title">Best Price Promise</div>
+      <p class="why-desc">We match any competitor price — and if you find it cheaper, we'll refund 110% of the difference.</p>
+    </div>
+    <div class="why-card fade-in fade-in-delay-3">
+      <div class="why-icon">📞</div>
+      <div class="why-title">24/7 Support</div>
+      <p class="why-desc">Our global team is always on standby. Whether it's midnight in Tokyo or dawn in Paris, we've got you covered.</p>
+    </div>
+    <div class="why-card fade-in fade-in-delay-4">
+      <div class="why-icon">✨</div>
+      <div class="why-title">Tailored Itineraries</div>
+      <p class="why-desc">Every trip is handcrafted to your preferences, pace, and personality. No cookie-cutter tours here.</p>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section id="testimonials">
+  <div class="section-header center fade-in">
+    <div class="section-label">✦ Stories</div>
+    <h2 class="section-title">What Travelers Say</h2>
+    <p class="section-sub">Real stories from real adventurers who trusted us with their dream trips</p>
+  </div>
+  <div class="test-track" id="testTrack">
+    <div class="test-card fade-in">
+      <div class="test-stars">★★★★★</div>
+      <p class="test-text">"Wanderlust made our honeymoon absolutely magical. Every detail was perfect — from the overwater bungalow to the private sunset dinner on the beach. We'll be booking with them again!"</p>
+      <div class="test-author">
+        <img class="test-avatar" src="https://images.unsplash.com/photo-1494790108755-2616b612b786?w=100&q=80" alt="Sarah">
+        <div>
+          <div class="test-name">Sarah & James K.</div>
+          <div class="test-trip">Maldives Honeymoon Package</div>
+        </div>
+      </div>
+    </div>
+    <div class="test-card fade-in">
+      <div class="test-stars">★★★★★</div>
+      <p class="test-text">"The European Grand Tour was beyond what I imagined. Our guide Marco knew every hidden gem in Rome. The cooking class in Florence was worth the entire trip alone!"</p>
+      <div class="test-author">
+        <img class="test-avatar" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&q=80" alt="David">
+        <div>
+          <div class="test-name">David Chen</div>
+          <div class="test-trip">European Grand Tour</div>
+        </div>
+      </div>
+    </div>
+    <div class="test-card fade-in">
+      <div class="test-stars">★★★★★</div>
+      <p class="test-text">"Solo travel felt daunting until I found Wanderlust. They organized everything seamlessly. Bali was transformative — I came back a different person. Already planning Kyoto next!"</p>
+      <div class="test-author">
+        <img class="test-avatar" src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&q=80" alt="Emma">
+        <div>
+          <div class="test-name">Emma Rodriguez</div>
+          <div class="test-trip">Bali Solo Adventure</div>
+        </div>
+      </div>
+    </div>
+    <div class="test-card fade-in">
+      <div class="test-stars">★★★★★</div>
+      <p class="test-text">"Took the whole family to Japan — four kids, two grandparents. Wanderlust planned every single activity age-appropriately. The kids still talk about the robot restaurant!"</p>
+      <div class="test-author">
+        <img class="test-avatar" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&q=80" alt="Michael">
+        <div>
+          <div class="test-name">Michael Thompson</div>
+          <div class="test-trip">Japan Family Experience</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="test-controls">
+    <div class="test-dot active" onclick="scrollTest(0)"></div>
+    <div class="test-dot" onclick="scrollTest(1)"></div>
+    <div class="test-dot" onclick="scrollTest(2)"></div>
+    <div class="test-dot" onclick="scrollTest(3)"></div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section id="cta">
+  <div class="cta-bg"></div>
+  <div class="cta-overlay"></div>
+  <div class="cta-content fade-in">
+    <div class="hero-badge" style="background:rgba(255,122,0,0.25)">✦ Your Next Chapter Awaits</div>
+    <h2 class="cta-title" style="margin-top:1rem">Ready for Your Next<br>Adventure?</h2>
+    <p class="cta-sub">Join 50,000+ travelers who've made memories that last a lifetime</p>
+    <button class="btn-cta">Book Your Dream Trip</button>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <div class="nav-logo">Wander<span>lust</span></div>
+      <p class="footer-desc">Crafting extraordinary travel experiences since 2010. Your adventure starts with a single conversation.</p>
+      <div class="social-links">
+        <div class="social-link">in</div>
+        <div class="social-link">tw</div>
+        <div class="social-link">ig</div>
+        <div class="social-link">fb</div>
+      </div>
+    </div>
+    <div>
+      <div class="footer-heading">Explore</div>
+      <ul class="footer-links">
+        <li><a href="#">Destinations</a></li>
+        <li><a href="#">Packages</a></li>
+        <li><a href="#">Adventure Trips</a></li>
+        <li><a href="#">Luxury Travel</a></li>
+        <li><a href="#">Group Tours</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-heading">Company</div>
+      <ul class="footer-links">
+        <li><a href="#">About Us</a></li>
+        <li><a href="#">Our Guides</a></li>
+        <li><a href="#">Blog</a></li>
+        <li><a href="#">Careers</a></li>
+        <li><a href="#">Contact</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-heading">Newsletter</div>
+      <div class="newsletter">
+        <p style="font-size:0.82rem;line-height:1.5">Get travel deals & inspiration straight to your inbox</p>
+        <input type="email" placeholder="your@email.com">
+        <button class="newsletter-btn">Subscribe ✈</button>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    © 2025 Wanderlust Travel Co. All rights reserved. · Privacy Policy · Terms · Cookies
+  </div>
+</footer>
+
+<script>
+  // Nav scroll effect
+  const navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', () => {
+    navbar.classList.toggle('scrolled', window.scrollY > 60);
+  });
+
+  // Scroll animations
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.15, rootMargin: '0px 0px -50px 0px' });
+  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+  // Animated counters
+  function animateCounter(el, target, suffix = '') {
+    let current = 0;
+    const step = Math.ceil(target / 60);
+    const timer = setInterval(() => {
+      current = Math.min(current + step, target);
+      el.textContent = current.toLocaleString() + suffix;
+      if (current >= target) clearInterval(timer);
+    }, 25);
+  }
+
+  const heroObserver = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        animateCounter(document.getElementById('counter1'), 50000, '+');
+        animateCounter(document.getElementById('counter2'), 120, '+');
+        animateCounter(document.getElementById('counter3'), 98000, '+');
+        heroObserver.disconnect();
+      }
+    });
+  }, { threshold: 0.5 });
+  heroObserver.observe(document.getElementById('hero'));
+
+  // Testimonial scroll
+  function scrollTest(idx) {
+    const track = document.getElementById('testTrack');
+    const cards = track.querySelectorAll('.test-card');
+    const cardW = cards[0].offsetWidth + 32;
+    track.scrollTo({ left: idx * cardW, behavior: 'smooth' });
+    document.querySelectorAll('.test-dot').forEach((d,i) => d.classList.toggle('active', i === idx));
+  }
+
+  // Auto-slide testimonials
+  let testIdx = 0;
+  setInterval(() => {
+    testIdx = (testIdx + 1) % 4;
+    scrollTest(testIdx);
+  }, 4000);
+</script>
+</body>
+</html>
